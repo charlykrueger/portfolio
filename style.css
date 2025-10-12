@@ -469,3 +469,41 @@ figure{ margin:0 }
 @media (prefers-reduced-motion: reduce){
   .landing .ball{ display:none; }
 }
+
+/* ABOUT: Ball – Farbe & Größe */
+.page-about .about-ball{
+  --size: clamp(68px, 10vw, 180px); /* ~halb so groß wie Landing */
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: #f46cc8;        /* gewünschtes Pink */
+  z-index: 1;                  /* unter deinem Text */
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce){
+  .page-about .about-ball{ display:none; }
+}
+
+.page-about .about-ball{
+  --size: clamp(68px, 10vw, 180px); /* ~halb so groß wie Landing */
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: #f46cc8;   /* gewünschtes Pink */
+  z-index: 1;            /* unter deinem Text */
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce){
+  .page-about .about-ball{ display:none; }
+}
+/* ===== ABOUT: robuste Ausrichtung ohne Margin-Collapsing ===== */
+.page-about .project-hero.about{
+  position: relative;
+  top: var(--about-offset, 0px);   /* JS schreibt hier rein */
+  margin-top: 0 !important;        /* neutralisiert alte Margin-Setzungen */
+}
+

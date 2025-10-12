@@ -342,3 +342,240 @@
   b2.style.transform = `translate3d(${balls[1].cx - balls[1].r}px, ${balls[1].cy - balls[1].r}px, 0)`;
   requestAnimationFrame(animate);
 })();
+
+/* ===== ABOUT: Ball bounct an Navi & About-Text — ohne Layout-Änderungen ===== */
+(function(){
+  if (!document.body.classList.contains('page-about')) return;
+  const ball = document.getElementById('aboutBall');
+  if (!ball) return;
+
+  // Viewport & Ball
+  let vw = window.innerWidth, vh = window.innerHeight;
+  const R = () => ball.getBoundingClientRect().width / 2;
+
+  // Start random (überall, auch im Weißraum unter der Sidebar erlaubt)
+  let cx = Math.random() * (vw - 2*R()) + R();
+  let cy = Math.random() * (vh - 2*R()) + R();
+
+  // Bewegung: nie exakt horizontal/vertikal
+  const deg = d => d*Math.PI/180;
+  const speed = 560 + Math.random()*180; // angenehm flott
+  const base = [45,135,225,315][(Math.random()*4)|0] + (Math.random()*16 - 8);
+  let ang = deg(base);
+
+  // Nur echte Textzeilen als Hindernisse (keine leere Sidebarfläche)
+  const TARGETS = [
+    '.sidebar .brand span', '.sidebar .nav a',
+    '.about-grid .caption-title', '.about-grid .prose',
+    '.about-text .prose'
+  ];
+  let rects = [];
+  const clamp = (v,min,max)=> Math.max(min, Math.min(max, v));
+
+  function snapshotRects(){
+    rects = [];
+    document.querySelectorAll(TARGETS.join(',')).forEach(el=>{
+      // pro Zeile ein enges Rechteck (keine großen Container!)
+      for (const b of el.getClientRects()){
+        if (b.width > 6 && b.height > 6){
+          rects.push({left:b.left, top:b.top, right:b.right, bottom:b.bottom});
+        }
+      }
+    });
+  }
+
+  function resize(){
+    vw = window.innerWidth; vh = window.innerHeight;
+    const r = R();
+    cx = clamp(cx, r, vw - r);
+    cy = clamp(cy, r, vh - r);
+    snapshotRects();
+  }
+  window.addEventListener('resize', resize, {passive:true});
+  window.addEventListener('scroll', snapshotRects, {passive:true});
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(snapshotRects);
+  snapshotRects();
+
+  function bounceWalls(){
+    const r = R();
+    let hit = false;
+    if (cx <= r){ cx = r; ang = Math.PI - ang; hit = true; }
+    if (cx >= vw - r){ cx = vw - r; ang = Math.PI - ang; hit = true; }
+    if (cy <= r){ cy = r; ang = -ang; hit = true; }
+    if (cy >= vh - r){ cy = vh - r; ang = -ang; hit = true; }
+    if (hit){ ang += deg((Math.random()*10 - 5)); } // kleiner Jitter
+  }
+
+  function collideText(){
+    const r = R();
+    for (const b of rects){
+      // nächster Punkt der Box zum Kreismittelpunkt
+      const px = clamp(cx, b.left, b.right);
+      const py = clamp(cy, b.top,  b.bottom);
+      const dx = cx - px, dy = cy - py;
+      if (dx*dx + dy*dy <= r*r){
+        // Normalvektor bestimmen
+        let nx, ny;
+        if (cx > b.left && cx < b.right && cy > b.top && cy < b.bottom){
+          // Mittelpunkt in der Box: nach außen entlang kleinster Penetration
+          const left   = Math.abs(cx - b.left);
+          const right  = Math.abs(b.right - cx);
+          const top    = Math.abs(cy - b.top);
+          const bottom = Math.abs(b.bottom - cy);
+          const m = Math.min(left,right,top,bottom);
+          if (m===left)   { nx=-1; ny=0;  cx=b.left  - r - .5; }
+          else if (m===right){ nx=1; ny=0;  cx=b.right + r + .5; }
+          else if (m===top){ nx=0; ny=-1; cy=b.top   - r - .5; }
+          else             { nx=0; ny=1;  cy=b.bottom+ r + .5; }
+        } else {
+          const d = Math.max(0.0001, Math.hypot(dx,dy));
+          nx = dx/d; ny = dy/d;
+          // leicht aus der Box heraus schieben
+          cx = px + nx*(r + .5);
+          cy = py + ny*(r + .5);
+        }
+        // Reflexion v' = v - 2(v·n)n
+        const vx = Math.cos(ang)*speed, vy = Math.sin(ang)*speed;
+        const dot = vx*nx + vy*ny;
+        const rx = vx - 2*dot*nx, ry = vy - 2*dot*ny;
+        ang = Math.atan2(ry, rx) + deg((Math.random()*8 - 4)); // nie perfekt gerade
+        return; // eine Kollision pro Frame reicht
+      }
+    }
+  }
+
+  let last = performance.now();
+  function tick(now){
+    const dt = (now - last)/1000; last = now;
+    cx += Math.cos(ang)*speed*dt;
+    cy += Math.sin(ang)*speed*dt;
+
+    bounceWalls();
+    collideText();
+
+    const r = R();
+    ball.style.transform = `translate3d(${cx - r}px, ${cy - r}px, 0)`;
+    requestAnimationFrame(tick);
+  }
+
+  // Start (keine Layout-Änderung!)
+  ball.style.transform = `translate3d(${cx - R()}px, ${cy - R()}px, 0)`;
+  requestAnimationFrame(tick);
+})();
+
+/* ===== ABOUT: exakt auf Höhe "01 FREE PROJECTS" ausrichten ===== */
+(function alignAboutToNav(){
+  if (!document.body.classList.contains('page-about')) return;
+
+  const content = document.querySelector('.content');
+  const hero    = document.querySelector('.content .project-hero.about'); // dein erster About-Block
+  const anchor  = document.querySelector('.nav a[href$="01_free_projects.html"]')
+                || document.querySelector('.nav a:first-child');
+
+  if (!content || !hero || !anchor) return;
+
+  function apply(){
+    // Positionen im Dokument (nicht nur im Viewport)
+    const contentTop = content.getBoundingClientRect().top + window.scrollY;
+    const anchorTop  = anchor.getBoundingClientRect().top  + window.scrollY;
+
+    const offset = Math.max(0, Math.round(anchorTop - contentTop));
+    hero.style.marginTop = offset + 'px';
+  }
+
+  // initial + bei Resizes + nach Font-Laden (weil Aileron metrisch leicht schiebt)
+  apply();
+  window.addEventListener('resize', apply);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
+})();
+/* ===== ABOUT: exakt an "01 FREE PROJECTS" ausrichten (robust) ===== */
+(function fixAboutAlign(){
+  if (!document.body.classList.contains('page-about')) return;
+
+  // 1) Ziele finden
+  const content = document.querySelector('.content');
+  // dein erster About-Block:
+  const hero = document.querySelector('.content .project-hero.about')
+             || document.querySelector('.content .project-hero');
+  // der Referenz-Link in der Sidebar:
+  const anchor = document.querySelector('.nav a[href$="01_free_projects.html"]')
+               || document.querySelector('.nav a:first-child');
+
+  if (!content || !hero || !anchor) return;
+
+  // 2) Mess-/Apply-Funktion
+  function apply() {
+    // absolute Dokument-Koordinaten vermeiden Viewport-Scroll-Effekte
+    const contentTop = content.getBoundingClientRect().top + window.scrollY;
+    const anchorTop  = anchor.getBoundingClientRect().top  + window.scrollY;
+
+    const offset = Math.max(0, Math.round(anchorTop - contentTop));
+    // inline Style gewinnt zuverlässig gegen generische CSS-Regeln
+    hero.style.marginTop = offset + 'px';
+  }
+
+  // 3) Stabil machen: mehrfach anwenden, wenn sich Schriften/Größen setzen
+  function applyStable(){
+    apply();
+    // einmal in der nächsten Frame – falls die Sidebar noch reflowt
+    requestAnimationFrame(apply);
+    // und ganz kurz später noch einmal (Font-Metrics etc.)
+    setTimeout(apply, 50);
+  }
+
+  // 4) Events/Observer
+  window.addEventListener('load', applyStable);
+  window.addEventListener('resize', applyStable);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(applyStable);
+
+  // Änderungen an Sidebar/Navi oder Content beobachten
+  const ro = new ResizeObserver(applyStable);
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar) ro.observe(sidebar);
+  ro.observe(content);
+  ro.observe(anchor);
+
+  // initial
+  applyStable();
+})();
+/* ===== ABOUT: Exakte Höhe wie "01 FREE PROJECTS" via CSS-Variable (ohne Margin-Collapsing) ===== */
+(function alignAboutStable(){
+  if (!document.body.classList.contains('page-about')) return;
+
+  const content = document.querySelector('.content');
+  const hero    = document.querySelector('.content .project-hero.about');
+  const anchor  = document.querySelector('.nav a[href$="01_free_projects.html"]')
+                || document.querySelector('.nav a:first-child');
+
+  if (!content || !hero || !anchor) return;
+
+  function apply(){
+    // absolute Dokumentkoordinaten verhindern Scroll-Einfluss
+    const contentTop = content.getBoundingClientRect().top + window.scrollY;
+    const anchorTop  = anchor.getBoundingClientRect().top  + window.scrollY;
+    const offset     = Math.max(0, Math.round(anchorTop - contentTop));
+
+    // 1) KEIN margin-top mehr: wir nutzen top + CSS-Variable
+    hero.style.marginTop = '0px';
+    hero.style.setProperty('--about-offset', offset + 'px');
+  }
+
+  function applyStable(){
+    apply();
+    requestAnimationFrame(apply);
+    setTimeout(apply, 50);
+  }
+
+  // reagieren auf Layout-/Font-Änderungen
+  window.addEventListener('load', applyStable);
+  window.addEventListener('resize', applyStable);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(applyStable);
+
+  // falls Sidebar/Content sich noch reflowen
+  const ro = new ResizeObserver(applyStable);
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar) ro.observe(sidebar);
+  ro.observe(content);
+
+  applyStable();
+})();
