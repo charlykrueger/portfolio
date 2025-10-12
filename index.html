@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Charly Krüger — Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="landing">
+  <!-- Sidebar bleibt für andere Seiten bestehen, ist hier aber ausgeblendet -->
+  <aside class="sidebar">
+    <h1 class="brand"><span>CHARLY</span><span>KRÜGER</span></h1>
+    <nav class="nav">
+      <a href="01_free_projects.html" class="active" aria-current="page">01 FREE PROJECTS</a>
+      <a href="02_people.html">02 PEOPLE</a>
+      <a href="03_fashion.html">03 FASHION</a>
+      <a href="04_events.html">04 EVENT</a>
+      <a href="05_ongoing_projects.html">05 ONGOING PROJECTS</a>
+      <a href="about.html" style="margin-top:14px;">ABOUT</a>
+      <a href="mailto:Charlotte.krueger@gmx.de">CONTACT</a>
+    </nav>
+  </aside>
+
+<main class="content">
+  <section class="hero" aria-label="Intro">
+    <svg class="xr" xmlns="http://www.w3.org/2000/svg" aria-hidden="false">
+      <defs>
+        <!-- X-Ray Maske: Viewport in Pixel + ZWEI Kreise -->
+        <mask id="xrMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" style="mask-type:luminance">
+          <rect id="xrRect" fill="black" x="0" y="0" width="0" height="0"></rect>
+          <circle id="xrCircle1" fill="white" cx="0" cy="0" r="0"></circle>
+          <circle id="xrCircle2" fill="white" cx="0" cy="0" r="0"></circle>
+        </mask>
+      </defs>
+
+      <!-- Titel weiter oben; X-Ray wirkt -->
+    <text class="xr-text xr-title xr-base"  x="50%" y="44%" dominant-baseline="middle" text-anchor="middle">
+      PORTFOLIO&#8239;/&#8239;2025
+        </text>
+    <text class="xr-text xr-title xr-white" x="50%" y="44%" dominant-baseline="middle" text-anchor="middle" mask="url(#xrMask)">
+      PORTFOLIO&#8239;/&#8239;2025
+    </text>
+
+      <!-- CLICK HERE darunter, X-Ray wirkt ebenfalls -->
+    <a class="click-link" href="01_free_projects.html">
+      <text class="xr-text xr-click xr-base"  x="50%" y="58%" text-anchor="middle">CLICK HERE</text>
+      <text class="xr-text xr-click xr-white" x="50%" y="58%" text-anchor="middle" mask="url(#xrMask)">CLICK HERE</text>
+    </a>
+    </svg>
+
+    <!-- ZWEI Bälle -->
+    <div class="ball" id="ball1" aria-hidden="true"></div>
+    <div class="ball" id="ball2" aria-hidden="true"></div>
+  </section>
+</main>
+
+  <script src="script.js"></script>
+</body>
+</html>
