@@ -26,8 +26,28 @@
     const enableTransition  = () => { track.style.transition = 'transform .5s ease'; };
     const disableTransition = () => { track.style.transition = 'none'; };
 
-    // Render + initial position ohne Animation
-    function render(){ track.style.transform = `translate3d(${-index*100}%,0,0)`; }
+    // Innenbreite (ohne linkes/rechtes Padding der .slider-Box)
+    function innerWidth(){
+      const cs = getComputedStyle(el);
+      const padL = parseFloat(cs.paddingLeft) || 0;
+      const padR = parseFloat(cs.paddingRight) || 0;
+      return Math.max(0, Math.round(el.clientWidth - padL - padR));
+    }
+
+    // Allen Slides exakt die Innenbreite geben (Pixel, keine %)
+    function sizeSlides(){
+      const w = innerWidth();
+      [...track.children].forEach(sl => { sl.style.flex = `0 0 ${w}px`; sl.style.width = `${w}px`; });
+    }
+
+    function render(){
+      const w = innerWidth();
+      const x = -index * w; // ganze Pixel
+      track.style.transform = `translate3d(${x}px,0,0)`;
+    }
+
+    // Initial sizing + position ohne Animation
+    sizeSlides();
     disableTransition(); render();
     void track.offsetWidth; // Reflow
     enableTransition();
@@ -95,9 +115,10 @@
       if(e.key==='ArrowRight') next();
     });
 
-    // Resize: Position beibehalten (kein Sprung)
+    // Resize: Slides neu bemessen + Position halten
     window.addEventListener('resize', ()=>{
       const wasTransition = track.style.transition;
+      sizeSlides();
       disableTransition();
       render();
       void track.offsetWidth;

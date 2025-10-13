@@ -173,7 +173,7 @@ figure{ margin:0 }
 }
 
 /* =========================
-   SLIDER (Galerie) — (unverändert)
+   SLIDER (Galerie)
 ========================= */
 .slider{
   position:relative;
@@ -184,6 +184,7 @@ figure{ margin:0 }
   padding:0 var(--arrow-pad);
   background:transparent;
   transform:translateX(var(--gallery-nudge));
+  /* entfernt: contain: layout paint; */
 }
 .slider::before,
 .slider::after{
@@ -197,12 +198,14 @@ figure{ margin:0 }
   height:100%; display:flex; gap:0;
   transition:transform .5s ease; will-change:transform; user-select:none;
   position:relative; z-index:0;
+  backface-visibility:hidden;
+  transform: translate3d(0,0,0);
 }
 .slide{ flex:0 0 100%; height:100%; display:flex; align-items:center; justify-content:center; }
 .slide img{ width:100%; height:100%; object-fit:cover; backface-visibility:hidden; }
 .slider[data-fit="contain"] .slide img{ object-fit:contain; background:transparent; }
 
-/* NEU: CLS-Fix – Slider-Bilder reservieren 3:2 Platz (wie der Container) */
+/* CLS-Fix – Slider-Bilder reservieren 3:2 Platz (wie der Container) */
 .project-hero .slides img{ aspect-ratio: 3 / 2; object-fit: cover; }
 
 .slider .prev,.slider .next{
@@ -223,6 +226,11 @@ figure{ margin:0 }
   margin-right: calc(-1 * var(--arrow-pad));
 }
 
+/* entfernt:
+   .slider { overflow: clip; }
+   .slides, .slide { contain: paint; }
+*/
+
 /* =========================
    MEDIEN-BLÖCKE
 ========================= */
@@ -235,7 +243,7 @@ figure{ margin:0 }
 /* Triple extra breit */
 .media:has(.triple){
   --triple-w:     calc((var(--slider-w) * var(--triple-scale)) - var(--spots-right-gap));
-  --triple-shift: calc((var(--triple-w) - var(--media-w)) / 2);
+  --triple-shift: calc((var(--triple-w) - (var(--media-w)) ) / 2);
   width: var(--triple-w);
   transform: translateX(calc(var(--gallery-nudge) + var(--triple-shift)));
 }
@@ -271,7 +279,7 @@ figure{ margin:0 }
 }
 
 /* =========================
-   3ER-SPOTS / 2ER-PAAR / VIDEO (wie gehabt)
+   3ER-SPOTS / 2ER-PAAR / VIDEO
 ========================= */
 .triple{
   display:grid;
@@ -312,7 +320,7 @@ figure{ margin:0 }
   grid-template-columns:repeat(2,1fr);
   gap: var(--pair-gap, 24px);
 }
-/* NEU: CLS-Fix – Duos & Paare reservieren Platz */
+/* CLS-Fix – Duos & Paare reservieren Platz */
 .pair img{ width:100%; height:auto; display:block; aspect-ratio: var(--pair-ratio); object-fit: cover; }
 .duo{
   display:grid;
@@ -373,7 +381,6 @@ figure{ margin:0 }
 
 /* =========================
    LANDING: HELLO + click here + Ball (minimal)
-   (bestehender Block – bleibt; Landing-spezifische Overrides folgen unten)
 ========================= */
 .hero{
   position:relative;
@@ -393,8 +400,8 @@ figure{ margin:0 }
 }
 .hello-btn{
   font-family: var(--font);
-  font-style: italic;           /* dünn & kursiv */
-  font-weight: 400;             /* Regular = „dünn“ hier */
+  font-style: italic;
+  font-weight: 400;
   font-size: clamp(68px, 12vw, 240px);
   line-height: .9;
   background:none;
@@ -426,14 +433,9 @@ figure{ margin:0 }
 }
 
 /* =========================
-   LANDING (NEU): PORTFOLIO 2025 X-Ray + größerer pinker Ball
-   – Overrides nur bei <body class="landing">
-========================= */
-/* =========================
    LANDING (PORTFOLIO / 2025 X-Ray + 2 Bälle)
 ========================= */
-
-.landing { --accent:#f46cc8; }        /* leicht abgeschwächt */
+.landing { --accent:#f46cc8; }
 .landing .sidebar{ display:none; }
 .landing .content{ margin-left:0; padding:0; }
 
@@ -453,22 +455,22 @@ figure{ margin:0 }
 }
 .xr-title{ letter-spacing:-0.05em; font-size:var(--xr-font-size, clamp(24px, 7vw, 160px)); }
 
-/* CLICK HERE: jetzt GROSSBUCHSTABEN, initial Regular, Hover = Black, kein Unterstrich */
+/* CLICK HERE */
 .xr-click{
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  font-weight: 400;                         /* bleibt Regular */
+  font-weight: 400;
   font-size: var(--click-size, clamp(18px, 3.2vw, 36px));
 }
-.click-link{ cursor:pointer; }                   /* kein Scale mehr */
-.click-link:hover .xr-click{ font-weight:900; }  /* nur Gewicht, keine Größe */
+.click-link{ cursor:pointer; }
+.click-link:hover .xr-click{ font-weight:900; }
 
 .xr-base{ fill:var(--ink,#111); }
 .xr-white{ fill:#fff; }
 
-/* Beide Bälle teilen sich dieselben Styles */
+/* Beide Bälle */
 .landing .ball{
-  --size: clamp(134px, 19.8vw, 360px);  /* aktueller Ball: 1/5 größer als vorheriger Stand */
+  --size: clamp(134px, 19.8vw, 360px);
   position:fixed; top:0; left:0;
   width:var(--size); height:var(--size);
   border-radius:50%;
@@ -476,44 +478,183 @@ figure{ margin:0 }
   z-index:1;
   pointer-events:none;
 }
-
 @media (prefers-reduced-motion: reduce){
   .landing .ball{ display:none; }
 }
 
 /* ABOUT: Ball – Farbe & Größe */
 .page-about .about-ball{
-  --size: clamp(68px, 10vw, 180px); /* ~halb so groß wie Landing */
+  --size: clamp(68px, 10vw, 180px);
   position: fixed;
   top: 0; left: 0;
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
-  background: #f46cc8;        /* gewünschtes Pink */
-  z-index: 1;                  /* unter deinem Text */
+  background: #f46cc8;
+  z-index: 1;
   pointer-events: none;
 }
 @media (prefers-reduced-motion: reduce){
   .page-about .about-ball{ display:none; }
 }
 
-.page-about .about-ball{
-  --size: clamp(68px, 10vw, 180px); /* ~halb so groß wie Landing */
-  position: fixed;
-  top: 0; left: 0;
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50%;
-  background: #f46cc8;   /* gewünschtes Pink */
-  z-index: 1;            /* unter deinem Text */
-  pointer-events: none;
-}
-@media (prefers-reduced-motion: reduce){
-  .page-about .about-ball{ display:none; }
-}
 /* ===== ABOUT: robuste Ausrichtung ohne Margin-Collapsing ===== */
 .page-about .project-hero.about{
   position: relative;
-  top: var(--about-offset, 0px);   /* JS schreibt hier rein */
-  margin-top: 0 !important;        /* neutralisiert alte Margin-Setzungen */
+  top: var(--about-offset, 0px);
+  margin-top: 0 !important;
+}
+/* ============ MOBILE SIDEBAR -> TOPBAR (<= 900px) ============ */
+@media (max-width: 900px){
+  :root{
+    /* Sidebar kalkulatorisch „abschalten“, damit die Galeriebreite voll genutzt wird */
+    --sidebar: 0px;
+    --gallery-pad: 20px;       /* etwas kompakter auf Mobil */
+    --gallery-nudge: 0px;
+    --header-h: clamp(56px, 9.5vw, 84px); /* geschätzte Topbar-Höhe für Content-Offset */
+  }
+
+  /* Sidebar wird zur Topbar */
+  .sidebar{
+    position: sticky;
+    top: 0; left: 0; right: 0;
+    bottom: auto;               /* überschreibt das alte fixed-Layout */
+    width: 100%;
+    height: auto;
+    padding: 10px 12px;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    z-index: 3;
+  }
+
+  /* Brand kompakter in einer Zeile */
+  .brand{
+    margin: 0;
+    font-size: clamp(28px, 5.2vw, 40px); /* war 40–45px */
+    line-height: 1;
+  }
+  .brand span{ display: inline; margin-right: 6px; }
+
+  /* Navigation wird zu einer horizontal scrollbaren Leiste */
+  .nav{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;         /* Firefox: Scrollbar ausblenden */
+  }
+  .nav::-webkit-scrollbar{ display: none; } /* WebKit: Scrollbar ausblenden */
+  .nav a{
+    white-space: nowrap;
+    padding: 6px 0;
+    font-size: clamp(16px, 4.6vw, 20px); /* etwas kleiner auf Mobil */
+  }
+
+  /* Content rutscht unter die Topbar, kein linker Rand mehr */
+  .content{
+    margin-left: 0;
+    padding-top: var(--header-h);  /* Platz für die Topbar */
+  }
+
+  /* Auf Mobil keine spezielle Ausrichtung des ersten Blocks erzwingen */
+  .content .project-hero{ margin-top: 0 !important; }
+}
+/* ============ MOBILE: Voll responsive Inhalt + Topbar (<= 900px) ============ */
+@media (max-width: 900px){
+  :root{
+    /* Sidebar neutralisieren + kompaktere Ränder */
+    --sidebar: 0px;
+    --gallery-pad: 16px;
+    --gallery-nudge: 0px;
+    --header-h: clamp(56px, 9.5vw, 84px);
+
+    /* WICHTIG: Mindestbreite der Galerie aufheben */
+    --gallery-min: 0px;
+    --arrow-pad: 16px;
+    --gallery-scale: 1;
+  }
+
+  /* Sidebar als Topbar */
+  .sidebar{
+    position: sticky;
+    top: 0; left: 0; right: 0;
+    bottom: auto;
+    width: 100%;
+    height: auto;
+    padding: 10px 12px;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    z-index: 3;
+  }
+  .brand{
+    margin: 0;
+    font-size: clamp(28px, 5.2vw, 40px);
+    line-height: 1;
+  }
+  .brand span{ display: inline; margin-right: 6px; }
+
+  .nav{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar{ display: none; }
+  .nav a{
+    white-space: nowrap;
+    padding: 6px 0;
+    font-size: clamp(16px, 4.6vw, 20px);
+  }
+
+  /* Inhalt nutzt volle Breite unter der Topbar */
+  .content{
+    margin-left: 0;
+    padding-top: var(--header-h);
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* Medien/Slider wirklich 100% breit */
+  .media{
+    width: 100%;
+    transform: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* Slider füllt die Media-Breite */
+  .media .slider{
+    transform: none;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: var(--arrow-pad);
+    padding-right: var(--arrow-pad);
+  }
+
+  /* Mehrspaltiges untereinander */
+  .duo{ grid-template-columns:1fr; gap:16px; }
+  .triple{ grid-template-columns:1fr; gap:16px; }
+  .pair{ grid-template-columns:1fr; gap:16px; }
+
+  /* Ersten Block nicht extra nach unten schieben */
+  .content .project-hero{ margin-top: 0 !important; }
+
+  /* About: Ball auf Mobil ausblenden (überlappt sonst Text) */
+  .page-about .about-ball{ display:none; }
 }

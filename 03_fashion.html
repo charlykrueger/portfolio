@@ -6,6 +6,10 @@
   <title>03 Fashion — Charly Krüger</title>
   <link rel="stylesheet" href="style.css">
 
+  <!-- Preload: die beiden Hero-Bilder, da sie nebeneinander sichtbar sind -->
+  <link rel="preload" as="image" href="./image/fashion/a1.jpg" imagesizes="100vw">
+  <link rel="preload" as="image" href="./image/fashion/a2.jpg" imagesizes="100vw">
+
   <!-- Erster Block: gleiche Breite/Ausrichtung wie .media + Lücke exakt mittig -->
   <style>
     :root{
@@ -68,14 +72,14 @@
     <section class="media project-hero hero-align">
       <div class="hero-row">
         <figure class="spot">
-          <img src="./image/fashion/a1.jpg" alt="A+ Modenschau 2025 — Covershoot 01">
+          <img src="./image/fashion/a1.jpg" alt="A+ Modenschau 2025 — Covershoot 01" loading="eager" fetchpriority="high" decoding="async">
         </figure>
 
         <!-- Mittlere Spalte ist die Lücke, exakt in der Container-Mitte -->
         <div class="gap-col" aria-hidden="true"></div>
 
         <figure class="spot">
-          <img src="./image/fashion/a2.jpg" alt="A+ Modenschau 2025 — Covershoot 02">
+          <img src="./image/fashion/a2.jpg" alt="A+ Modenschau 2025 — Covershoot 02" loading="eager" fetchpriority="high" decoding="async">
         </figure>
       </div>
     </section>
@@ -89,11 +93,11 @@
     <section class="media">
       <div class="slider" data-fit="contain">
         <div class="slides">
-          <figure class="slide"><img src="./image/fashion/ronja1.jpg" alt="Bachelorkollektion Ronja Schulz — 01" loading="eager"></figure>
-          <figure class="slide"><img src="./image/fashion/ronja2.jpg" alt="Bachelorkollektion Ronja Schulz — 02"></figure>
-          <figure class="slide"><img src="./image/fashion/ronja3.jpg" alt="Bachelorkollektion Ronja Schulz — 03"></figure>
-          <figure class="slide"><img src="./image/fashion/ronja4.jpg" alt="Bachelorkollektion Ronja Schulz — 04"></figure>
-          <figure class="slide"><img src="./image/fashion/ronja5.jpg" alt="Bachelorkollektion Ronja Schulz — 05"></figure>
+          <figure class="slide"><img src="./image/fashion/ronja1.jpg" alt="Bachelorkollektion Ronja Schulz — 01" loading="eager" fetchpriority="high" decoding="async"></figure>
+          <figure class="slide"><img src="./image/fashion/ronja2.jpg" alt="Bachelorkollektion Ronja Schulz — 02" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/fashion/ronja3.jpg" alt="Bachelorkollektion Ronja Schulz — 03" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/fashion/ronja4.jpg" alt="Bachelorkollektion Ronja Schulz — 04" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/fashion/ronja5.jpg" alt="Bachelorkollektion Ronja Schulz — 05" loading="lazy" decoding="async"></figure>
         </div>
       </div>
     </section>
@@ -107,13 +111,13 @@
     <section class="media">
       <div class="triple">
         <figure class="spot">
-          <img src="./image/fashion/alina1.jpg" alt="Bachelorkollektion Alina — 01">
+          <img src="./image/fashion/alina1.jpg" alt="Bachelorkollektion Alina — 01" loading="lazy" decoding="async">
         </figure>
         <figure class="spot">
-          <img src="./image/fashion/aline2.jpg" alt="Bachelorkollektion Alina — 02">
+          <img src="./image/fashion/aline2.jpg" alt="Bachelorkollektion Alina — 02" loading="lazy" decoding="async">
         </figure>
         <figure class="spot">
-          <img src="./image/fashion/alina3.jpg" alt="Bachelorkollektion Alina — 03">
+          <img src="./image/fashion/alina3.jpg" alt="Bachelorkollektion Alina — 03" loading="lazy" decoding="async">
         </figure>
       </div>
     </section>

@@ -6,6 +6,9 @@
   <title>01 Free Projects — Charly Krüger</title>
   <link rel="stylesheet" href="style.css">
 
+  <!-- Preload: erstes Hero-Bild der ersten Galerie -->
+  <link rel="preload" as="image" href="./image/pink_tax/pink_tax_01.jpg" imagesizes="100vw">
+
   <!-- Responsive-Wrapper nur für YouTube-Embeds -->
   <style>
     .yt-wrap { position: relative; width: 100%; max-width: 1200px; margin: 0 auto 2rem; }
@@ -18,6 +21,7 @@
       <a href="index.html" aria-label="Zur Startseite">
         <span>CHARLY</span><span>KRÜGER</span>
       </a>
+
     </h1>
     <nav class="nav">
       <a href="01_free_projects.html" class="active" aria-current="page">01 FREE PROJECTS</a>
@@ -35,18 +39,18 @@
     <section class="project-hero">
       <div class="slider" data-fit="contain">
         <div class="slides">
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_01.jpg" alt="Pink Tax 01"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_02.jpg" alt="Pink Tax 02"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_03.jpg" alt="Pink Tax 03"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_04.jpg" alt="Pink Tax 04"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_05.jpg" alt="Pink Tax 05"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_06.jpg" alt="Pink Tax 06"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_07.jpg" alt="Pink Tax 07"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_08.jpg" alt="Pink Tax 08"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_09.jpg" alt="Pink Tax 09"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_10.jpg" alt="Pink Tax 10"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_11.jpg" alt="Pink Tax 11"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_12.jpg" alt="Pink Tax 12"></figure>
+          <figure class="slide"><img src="./image/pink_tax/pink_tax_01.jpg" alt="Pink Tax 01" loading="eager" fetchpriority="high" decoding="async"></figure>
+          <figure class="slide"><img src="./image/pink_tax/pink_tax_02.jpg" alt="Pink Tax 02" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/pink_tax/pink_tax_03.jpg" alt="Pink Tax 03" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/pink_tax/pink_tax_04.jpg" alt="Pink Tax 04" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/pink_tax/pink_tax_05.jpg" alt="Pink Tax 05" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/pink_tax/pink_tax_06.jpg" alt="Pink Tax 06" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/pink_tax/pink_tax_07.jpg" alt="Pink Tax 07" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/pink_tax/pink_tax_08.jpg" alt="Pink Tax 08" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/pink_tax/pink_tax_09.jpg" alt="Pink Tax 09" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/pink_tax/pink_tax_10.jpg" alt="Pink Tax 10" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/pink_tax/pink_tax_11.jpg" alt="Pink Tax 11" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/pink_tax/pink_tax_12.jpg" alt="Pink Tax 12" loading="lazy" decoding="async"></figure>
         </div>
       </div>
     </section>
@@ -74,13 +78,14 @@
     </section>
 
     <!-- 3) Fotoduo -->
-    <section class="media">
+    <section class="media" style="--portrait-ratio: 3 / 2;">
       <div class="duo">
         <figure><img src="./image/AutorInnen/autorInnen01.png" alt="Reproduktion – Bild 1"></figure>
         <figure><img src="./image/AutorInnen/autorInnen02.png" alt="Reproduktion – Bild 2"></figure>
         <figure><img src="./image/AutorInnen/autorInnen03.png" alt="Reproduktion – Bild 3"></figure>
       </div>
     </section>
+
 
     <!-- 3a) Untertitel Reproduktion + großer Abstand -->
     <section class="media spacer-half">
@@ -95,10 +100,10 @@
     <section class="media project-hero">
       <div class="slider" data-fit="contain">
         <div class="slides">
-          <figure class="slide"><img src="./image/alpha_1/a1.jpg" alt="Alpha 1 – Bild 1"></figure>
-          <figure class="slide"><img src="./image/alpha_1/a2.jpg" alt="Alpha 1 – Bild 2"></figure>
-          <figure class="slide"><img src="./image/alpha_1/a3.jpg" alt="Alpha 1 – Bild 3"></figure>
-          <figure class="slide"><img src="./image/alpha_1/a4.jpg" alt="Alpha 1 – Bild 4"></figure>
+          <figure class="slide"><img src="./image/alpha_1/a1.jpg" alt="Alpha 1 – Bild 1" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/alpha_1/a2.jpg" alt="Alpha 1 – Bild 2" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/alpha_1/a3.jpg" alt="Alpha 1 – Bild 3" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/alpha_1/a4.jpg" alt="Alpha 1 – Bild 4" loading="lazy" decoding="async"></figure>
         </div>
       </div>
     </section>
@@ -115,12 +120,12 @@
     <section class="media project-hero">
       <div class="slider" data-fit="contain">
         <div class="slides">
-          <figure class="slide"><img src="./image/lowshutter/lowshutter.jpg" alt="Low Shutter 0"></figure>
-          <figure class="slide"><img src="./image/lowshutter/lowshutter1.jpg" alt="Low Shutter 1"></figure>
-          <figure class="slide"><img src="./image/lowshutter/lowshutter2.jpg" alt="Low Shutter 2"></figure>
-          <figure class="slide"><img src="./image/lowshutter/lowshutter3.jpg" alt="Low Shutter 3"></figure>
-          <figure class="slide"><img src="./image/lowshutter/lowshutter4.jpg" alt="Low Shutter 4"></figure>
-          <figure class="slide"><img src="./image/lowshutter/lowshutter5.jpg" alt="Low Shutter 5"></figure>
+          <figure class="slide"><img src="./image/lowshutter/lowshutter.jpg" alt="Low Shutter 0" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/lowshutter/lowshutter1.jpg" alt="Low Shutter 1" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/lowshutter/lowshutter2.jpg" alt="Low Shutter 2" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/lowshutter/lowshutter3.jpg" alt="Low Shutter 3" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/lowshutter/lowshutter4.jpg" alt="Low Shutter 4" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img src="./image/lowshutter/lowshutter5.jpg" alt="Low Shutter 5" loading="lazy" decoding="async"></figure>
         </div>
       </div>
     </section>
