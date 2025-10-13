@@ -5,10 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>03 Fashion — Charly Krüger</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- Erster Block: Lücke exakt auf Container-Mitte (= Galerie-Mitte) ausrichten -->
+  <style>
+    :root{
+      /* Inhaltsbreite – nimm hier die gleiche Max-Breite wie deine Galerie */
+      --content-w: min(1200px, calc(100% - 2rem));
+      /* Lückengröße zwischen den Bildern */
+      --gap: clamp(12px, 2vw, 28px);
+    }
+
+    /* Sektion ohne zusätzliches Padding, damit die Mitte stimmt */
+    .media.hero-align{
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    /* Der innere Row-Container hat exakt die gleiche Breite + Zentrierung wie die Galerie */
+    .hero-align .hero-row{
+      width: var(--content-w);
+      margin: 0 auto;             /* zentriert wie die Galerie darunter */
+      display: grid;
+      grid-template-columns: 1fr var(--gap) 1fr; /* mittlere Spalte = die Lücke */
+      column-gap: 0;              /* Lücke wird als eigene Mittelsäule geführt */
+      align-items: center;
+    }
+
+    .hero-align figure{ margin: 0; }
+    .hero-align img{
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Responsiv: auf sehr kleinen Screens untereinander stapeln */
+    @media (max-width: 700px){
+      .hero-align .hero-row{
+        grid-template-columns: 1fr; /* Bilder untereinander */
+      }
+      .hero-align .hero-row > .gap-col{ display:none; }
+    }
+  </style>
 </head>
 <body class="page-fashion">
   <aside class="sidebar">
-    <h1 class="brand"><span>CHARLY</span><span>KRÜGER</span></h1>
+    <h1 class="brand">
+      <a href="index.html" aria-label="Zur Startseite">
+        <span>CHARLY</span><span>KRÜGER</span>
+      </a>
+    </h1>
+
     <nav class="nav">
       <a href="01_free_projects.html">01 FREE PROJECTS</a>
       <a href="02_people.html">02 PEOPLE</a>
@@ -22,22 +68,19 @@
 
   <main class="content">
 
-    <!-- ========== PROJEKT 1: A+ MODESHOW (3 Spots) ========== -->
-    <section class="media project-hero">
-      <div class="triple">
+    <!-- ========== PROJEKT 1: Zwei Bilder, Lücke = exakte Mitte (wie Galerie) ========== -->
+    <section class="media project-hero hero-align">
+      <div class="hero-row">
         <figure class="spot">
           <img src="./image/fashion/a1.jpg" alt="A+ Modenschau 2025 — Covershoot 01">
         </figure>
+
+        <!-- Mittlere Spalte ist die Lücke, genau auf der Container-Mitte -->
+        <div class="gap-col" aria-hidden="true"></div>
+
         <figure class="spot">
           <img src="./image/fashion/a2.jpg" alt="A+ Modenschau 2025 — Covershoot 02">
         </figure>
-        <div class="spot">
-          <div class="video-portrait">
-            <video class="video-player"
-                   src="./video/vid1.mp4"
-                   muted autoplay loop playsinline></video>
-          </div>
-        </div>
       </div>
     </section>
 

@@ -5,10 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>01 Free Projects — Charly Krüger</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- Responsive-Wrapper nur für YouTube-Embeds -->
+  <style>
+    .yt-wrap { position: relative; width: 100%; max-width: 1200px; margin: 0 auto 2rem; }
+    .yt-wrap::before { content: ""; display: block; padding-top: 56.25%; } /* 16:9 */
+    .yt-wrap > iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+  </style>
 </head>
 <body class="page-free">
-  <aside class="sidebar">
-    <h1 class="brand"><span>CHARLY</span><span>KRÜGER</span></h1>
+  <aside class="sidebar"><h1 class="brand">
+      <a href="index.html" aria-label="Zur Startseite">
+        <span>CHARLY</span><span>KRÜGER</span>
+      </a>
+    </h1>
     <nav class="nav">
       <a href="01_free_projects.html" class="active" aria-current="page">01 FREE PROJECTS</a>
       <a href="02_people.html">02 PEOPLE</a>
@@ -25,7 +35,6 @@
     <section class="project-hero">
       <div class="slider" data-fit="contain">
         <div class="slides">
-          <!-- Deine Doppelpunkt-Pfade -->
           <figure class="slide"><img src="./image/pink_tax/pink_tax_01.jpg" alt="Pink Tax 01"></figure>
           <figure class="slide"><img src="./image/pink_tax/pink_tax_02.jpg" alt="Pink Tax 02"></figure>
           <figure class="slide"><img src="./image/pink_tax/pink_tax_03.jpg" alt="Pink Tax 03"></figure>
@@ -50,14 +59,17 @@
       </p>
     </section>
 
-    <!-- 2) Video-Block -->
+    <!-- 2) Video-Block — YouTube-Einbettung (Autor*innenfilm) -->
     <section class="media">
-      <div class="video">
-        <!-- Space in Dateiname: als %20 kodiert -->
-        <video class="video-player"
-               src="./video/Abgabe_Autorinnenfilm.mp4"
-               muted autoplay loop playsinline></video>
-        <button class="sound-toggle" aria-label="Ton umschalten">🔇</button>
+      <div class="yt-wrap">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/DWxzZ8s3cRw?rel=0&modestbranding=1"
+          title="Autor*innenfilm — Charly Krüger"
+          loading="lazy"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
       </div>
     </section>
 
@@ -83,8 +95,6 @@
     <section class="media project-hero">
       <div class="slider" data-fit="contain">
         <div class="slides">
-          <!-- WICHTIG: TIFF wird in Browsern i.d.R. NICHT angezeigt.
-               Bitte vorher als JPG/PNG exportieren und die Endungen anpassen. -->
           <figure class="slide"><img src="./image/alpha_1/a1.jpg" alt="Alpha 1 – Bild 1"></figure>
           <figure class="slide"><img src="./image/alpha_1/a2.jpg" alt="Alpha 1 – Bild 2"></figure>
           <figure class="slide"><img src="./image/alpha_1/a3.jpg" alt="Alpha 1 – Bild 3"></figure>
@@ -101,32 +111,26 @@
       </p>
     </section>
 
-
     <!-- Neue Galerie: Low Shutter Experimente -->
-<section class="media project-hero">
-  <div class="slider" data-fit="contain">
-    <div class="slides">
-      <figure class="slide"><img src="./image/lowshutter/lowshutter.jpg" alt="Low Shutter 0"></figure>
-      <figure class="slide"><img src="./image/lowshutter/lowshutter1.jpg" alt="Low Shutter 1"></figure>
-      <figure class="slide"><img src="./image/lowshutter/lowshutter2.jpg" alt="Low Shutter 2"></figure>
-      <figure class="slide"><img src="./image/lowshutter/lowshutter3.jpg" alt="Low Shutter 3"></figure>
-      <figure class="slide"><img src="./image/lowshutter/lowshutter4.jpg" alt="Low Shutter 4"></figure>
-      <figure class="slide"><img src="./image/lowshutter/lowshutter5.jpg" alt="Low Shutter 5"></figure>
-      <!-- Optional: das _DSC…-Bild auch noch -->
-      <!-- <figure class="slide"><img src="./image:/lowshutter:/_DSC3614-2-2-2-2-4.jpg" alt="Low Shutter extra"></figure> -->
-    </div>
-  </div>
-</section>
+    <section class="media project-hero">
+      <div class="slider" data-fit="contain">
+        <div class="slides">
+          <figure class="slide"><img src="./image/lowshutter/lowshutter.jpg" alt="Low Shutter 0"></figure>
+          <figure class="slide"><img src="./image/lowshutter/lowshutter1.jpg" alt="Low Shutter 1"></figure>
+          <figure class="slide"><img src="./image/lowshutter/lowshutter2.jpg" alt="Low Shutter 2"></figure>
+          <figure class="slide"><img src="./image/lowshutter/lowshutter3.jpg" alt="Low Shutter 3"></figure>
+          <figure class="slide"><img src="./image/lowshutter/lowshutter4.jpg" alt="Low Shutter 4"></figure>
+          <figure class="slide"><img src="./image/lowshutter/lowshutter5.jpg" alt="Low Shutter 5"></figure>
+        </div>
+      </div>
+    </section>
 
-<!-- Caption mit kleinem Abstand (1/8 der Galeriehöhe) -->
-<section class="media">
-  <h3 class="caption-title">LOW SHUTTER EXPERIMENTE</h3>
-  <p class="prose">entstanden 2024.</p>
-</section>
-
+    <!-- Caption -->
+    <section class="media">
+      <h3 class="caption-title">LOW SHUTTER EXPERIMENTE</h3>
+      <p class="prose">entstanden 2024.</p>
+    </section>
   </main>
-
-
 
   <script src="script.js"></script>
 </body>
