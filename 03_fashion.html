@@ -6,28 +6,23 @@
   <title>03 Fashion — Charly Krüger</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- Erster Block: Lücke exakt auf Container-Mitte (= Galerie-Mitte) ausrichten -->
+  <!-- Erster Block: gleiche Breite/Ausrichtung wie .media + Lücke exakt mittig -->
   <style>
     :root{
-      /* Inhaltsbreite – nimm hier die gleiche Max-Breite wie deine Galerie */
-      --content-w: min(1200px, calc(100% - 2rem));
-      /* Lückengröße zwischen den Bildern */
-      --gap: clamp(12px, 2vw, 28px);
+      /* Lückengröße – kleiner = Bilder größer */
+      --gap: clamp(14px, 1.6vw, 24px);
     }
 
-    /* Sektion ohne zusätzliches Padding, damit die Mitte stimmt */
-    .media.hero-align{
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-    }
+    /* Die Sektion hat bereits .media → gleiche Breite/Transform wie Galerie & Text */
+    .hero-align { padding-left: 0 !important; padding-right: 0 !important; }
 
-    /* Der innere Row-Container hat exakt die gleiche Breite + Zentrierung wie die Galerie */
+    /* Der innere Row-Container füllt den ganzen .media-Container */
     .hero-align .hero-row{
-      width: var(--content-w);
-      margin: 0 auto;             /* zentriert wie die Galerie darunter */
+      width: 100%;
+      margin: 0 auto;                 /* zentriert wie .media */
       display: grid;
-      grid-template-columns: 1fr var(--gap) 1fr; /* mittlere Spalte = die Lücke */
-      column-gap: 0;              /* Lücke wird als eigene Mittelsäule geführt */
+      grid-template-columns: 1fr var(--gap) 1fr;  /* mittlere Spalte = Lücke (liegt exakt in der Mitte) */
+      column-gap: 0;
       align-items: center;
     }
 
@@ -35,13 +30,13 @@
     .hero-align img{
       display: block;
       width: 100%;
-      height: auto;
+      height: auto;                    /* proportional; kein Beschnitt */
     }
 
-    /* Responsiv: auf sehr kleinen Screens untereinander stapeln */
+    /* Auf sehr kleinen Screens untereinander */
     @media (max-width: 700px){
       .hero-align .hero-row{
-        grid-template-columns: 1fr; /* Bilder untereinander */
+        grid-template-columns: 1fr;
       }
       .hero-align .hero-row > .gap-col{ display:none; }
     }
@@ -69,13 +64,14 @@
   <main class="content">
 
     <!-- ========== PROJEKT 1: Zwei Bilder, Lücke = exakte Mitte (wie Galerie) ========== -->
+    <!-- .media sorgt dafür, dass linke Kante = linke Kante vom Text darunter -->
     <section class="media project-hero hero-align">
       <div class="hero-row">
         <figure class="spot">
           <img src="./image/fashion/a1.jpg" alt="A+ Modenschau 2025 — Covershoot 01">
         </figure>
 
-        <!-- Mittlere Spalte ist die Lücke, genau auf der Container-Mitte -->
+        <!-- Mittlere Spalte ist die Lücke, exakt in der Container-Mitte -->
         <div class="gap-col" aria-hidden="true"></div>
 
         <figure class="spot">
@@ -93,7 +89,7 @@
     <section class="media">
       <div class="slider" data-fit="contain">
         <div class="slides">
-          <figure class="slide"><img src="./image/fashion/ronja1.jpg" alt="Bachelorkollektion Ronja Schulz — 01"></figure>
+          <figure class="slide"><img src="./image/fashion/ronja1.jpg" alt="Bachelorkollektion Ronja Schulz — 01" loading="eager"></figure>
           <figure class="slide"><img src="./image/fashion/ronja2.jpg" alt="Bachelorkollektion Ronja Schulz — 02"></figure>
           <figure class="slide"><img src="./image/fashion/ronja3.jpg" alt="Bachelorkollektion Ronja Schulz — 03"></figure>
           <figure class="slide"><img src="./image/fashion/ronja4.jpg" alt="Bachelorkollektion Ronja Schulz — 04"></figure>

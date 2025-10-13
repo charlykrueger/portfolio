@@ -93,6 +93,9 @@
 
   /* Triple-Skalierung */
   --triple-scale: 1;
+
+  /* NEU: Ratio für .pair (z. B. 3:2) */
+  --pair-ratio: 3 / 2;
 }
 
 /* Seitenvarianten */
@@ -116,6 +119,10 @@ a{ color:inherit; text-decoration:none }
 img,video{ max-width:100%; height:auto; display:block }
 h1,h2,h3,p{ margin:0 }
 figure{ margin:0 }
+
+/* Brand-Link (wenn der Brand klickbar ist) */
+.brand a { color: inherit; text-decoration: none; display: inline-block; }
+.brand a:hover { opacity:.85; }
 
 /* =========================
    SIDEBAR / NAV
@@ -194,6 +201,9 @@ figure{ margin:0 }
 .slide{ flex:0 0 100%; height:100%; display:flex; align-items:center; justify-content:center; }
 .slide img{ width:100%; height:100%; object-fit:cover; backface-visibility:hidden; }
 .slider[data-fit="contain"] .slide img{ object-fit:contain; background:transparent; }
+
+/* NEU: CLS-Fix – Slider-Bilder reservieren 3:2 Platz (wie der Container) */
+.project-hero .slides img{ aspect-ratio: 3 / 2; object-fit: cover; }
 
 .slider .prev,.slider .next{
   position:absolute; top:50%; transform:translateY(-50%);
@@ -275,6 +285,7 @@ figure{ margin:0 }
   object-fit:cover;
 }
 
+/* Video-Spots (hochkant) */
 .triple .spot:has(video){
   aspect-ratio: var(--portrait-ratio);
   overflow:hidden;
@@ -301,7 +312,14 @@ figure{ margin:0 }
   grid-template-columns:repeat(2,1fr);
   gap: var(--pair-gap, 24px);
 }
-.pair img{ width:100%; height:auto; display:block; }
+/* NEU: CLS-Fix – Duos & Paare reservieren Platz */
+.pair img{ width:100%; height:auto; display:block; aspect-ratio: var(--pair-ratio); object-fit: cover; }
+.duo{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:24px;
+}
+.duo img{ width:100%; height:auto; display:block; aspect-ratio: var(--portrait-ratio); object-fit: cover; }
 
 .video{ position:relative; width:100%; aspect-ratio:16/9; background:#000; overflow:hidden; }
 .video .video-player{ width:100%; height:100%; object-fit:cover; display:block; }
@@ -312,13 +330,6 @@ figure{ margin:0 }
   font-size:14px; line-height:1; opacity:.9;
 }
 .sound-toggle:hover{ opacity:1; }
-
-.duo{
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:24px;
-}
-.duo img{ width:100%; height:auto; display:block; }
 
 /* =========================
    RESPONSIVE
@@ -506,4 +517,3 @@ figure{ margin:0 }
   top: var(--about-offset, 0px);   /* JS schreibt hier rein */
   margin-top: 0 !important;        /* neutralisiert alte Margin-Setzungen */
 }
-
