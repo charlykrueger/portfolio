@@ -5,58 +5,161 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>05 Ongoing Projects — Charly Krüger</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- Monsieur La Doulaise (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&display=swap" rel="stylesheet">
+
   <style>
-    /* Pink-Ton für diese Seite */
+    @font-face{
+      font-family:"MonsieurLocal";
+      src:url("./fonts/MonsieurLaDoulaise-Regular.woff2") format("woff2");
+      font-weight:400; font-style:normal; font-display:swap;
+    }
+
+    :root{
+      --accent:#f46cc8;
+      --sidebar-w:240px;
+
+      /* Kopf/Navigation */
+      --brand-top-pad: 18px;
+      --brand-bottom-gap: 14px;
+      --brand-line: calc(var(--brand-size) * var(--brand-leading));
+      --nav-item-h: clamp(22px, 2.4vw, 34px);
+
+      /* Inhaltseinzüge (Lesbarkeit) */
+      --gap: clamp(48px, 6vw, 96px);
+      --text-offset: clamp(56px, 7vw, 140px);
+
+      /* ROSA – links & hoch (wie zuletzt) */
+      --rosa-left-tweak: -72px;
+      --rosa-drop: clamp(0px, 2vw, 40px);
+      --rosa-safe-top: max(12px, env(safe-area-inset-top));
+      --rosa-top-adjust: -96px;
+
+      /* TEXT-START – auf Höhe „03 FASHION“ */
+      --text-start-shift-lines: 0;
+      --text-top-adjust: 0px;
+
+      /* Buchstaben-Finetuning */
+      --rosa-R-scale: .88;
+      --rosa-R-scaleX: .96;
+      --rosa-rest-scale: 1.18;
+      --rosa-tighten: -0.02em;
+      --rosa-rest-shiftY: -0.02em;
+    }
+
     .page-ongoing{ --accent:#f46cc8; }
 
-    /* Engere vertikale Abstände für Textfluss */
-    .page-ongoing{
-      --block-gap:14px;
-      --block-gap-lg:18px;
-      --gap-caption:12px;
-      --gap-to-gallery:18px;
-    }
-    .stack-tight > * + *{ margin-top:8px; }
-
-    /* Titel exakt auf Höhe des ersten Nav-Links starten */
-    .align-with-first-nav{
-      margin-top: calc(18px + 14px + (var(--brand-size) * var(--brand-leading) * 2));
-    }
-
-    /* 3-Spalten-Layout: Text belegt linke 2/3, rechts bleibt frei */
+    /* Inhalt rechts der Leiste */
     .page-ongoing .content{
       display:grid;
       grid-template-columns:repeat(3, minmax(0,1fr));
       column-gap: var(--gutter);
+      margin-left: calc(var(--sidebar-w) + var(--gap));
     }
-    .page-ongoing .span-two{ grid-column:1 / span 2; }
+    .page-ongoing .span-two{ grid-column:1 / span 2; position:relative; z-index:0; }
+    .page-ongoing .span-two > *{ position:relative; z-index:4; }
 
-    /* Media-Blöcke: volle Spaltenbreite, keine horizontale Verschiebung */
-    .page-ongoing .media{
-      width:100%;
-      transform:none;
-      margin-left:0; margin-right:0;
+    /* Text-Einzug (beibehalten) */
+    .page-ongoing .span-two .media{ padding-left: var(--text-offset); }
+
+    .page-ongoing .prose{ color:#111; line-height: 1.04; }
+    .stack-tight > * + *{ margin-top:10px; }
+
+    /* Text beginnt auf Höhe „03 FASHION“ */
+    .align-with-first-nav{
+      margin-top: calc(
+        var(--brand-top-pad) +
+        (var(--brand-line) * 2) +
+        var(--brand-bottom-gap) +
+        (var(--nav-item-h) * (2 + var(--text-start-shift-lines))) +
+        var(--text-top-adjust)
+      );
     }
 
-    /* Farben: Fließtext schwarz; Überschriften gezielt rosa */
-    .prose{ color:#111; }
-    .accent{ color:var(--accent); }
+    /* —— ROSA —— */
+    .rosa-fixed{
+      position: fixed;
+      top: calc(
+        var(--brand-top-pad) +
+        (var(--brand-line) * 2) +
+        var(--brand-bottom-gap) +
+        var(--rosa-drop) +
+        var(--rosa-safe-top) +
+        var(--rosa-top-adjust)
+      );
+      left: calc(var(--sidebar-w) + var(--rosa-left-tweak));
+      right: 0;
 
-    /* Mobile: eine Spalte */
+      font-family:"MonsieurLocal","Monsieur La Doulaise",cursive;
+      font-weight:400;
+      color:var(--accent);
+      font-size: clamp(170px, 32vw, 950px);
+      line-height:.72;
+      white-space:nowrap;
+      letter-spacing:0;
+      opacity:.9;
+      filter: blur(24px);
+      pointer-events:none;
+      z-index:3;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      transform-origin:left top;
+    }
+
+    /* Spans für „R“ / „osa“ */
+    .rosa-fixed .rosa-r{
+      display:inline-block;
+      font-size: calc(1em * var(--rosa-R-scale));
+      transform: scaleX(var(--rosa-R-scaleX));
+      transform-origin: left baseline;
+      margin-right: var(--rosa-tighten);
+    }
+    .rosa-fixed .rosa-rest{
+      display:inline-block;
+      font-size: calc(1em * var(--rosa-rest-scale));
+      vertical-align: baseline;
+      transform: translateY(var(--rosa-rest-shiftY));
+    }
+
+    /* Sidebar-Schrift vor dem Rosa */
+    .sidebar .brand, .sidebar .nav{ position:relative; z-index:5; }
+
+    /* Mobile */
     @media (max-width:900px){
-      .page-ongoing .content{ grid-template-columns:1fr; }
+      .page-ongoing .content{ grid-template-columns:1fr; margin-left:0; }
       .page-ongoing .span-two{ grid-column:1 / -1; }
+
+      .align-with-first-nav{
+        margin-top: calc( var(--header-h, 56px) + (var(--nav-item-h) * (2 + var(--text-start-shift-lines))) + var(--text-top-adjust) );
+      }
+
+      .page-ongoing .span-two .media{ padding-left: clamp(24px, 10vw, 72px); }
+
+      .rosa-fixed{
+        top: calc(var(--header-h, 56px) + var(--rosa-safe-top) + var(--rosa-drop) + var(--rosa-top-adjust));
+        left: 12%;
+        right: 0;
+        font-size: clamp(140px, 46vw, 560px);
+        filter: blur(20px);
+      }
     }
   </style>
 </head>
 <body class="page-ongoing">
-  <aside class="sidebar">
-  <h1 class="brand">
-    <a href="index.html" aria-label="Zur Startseite">
-      <span>CHARLY</span><span>KRÜGER</span>
-    </a>
-  </h1>
+  <!-- Rosa: R gleich, „osa“ größer; links & hoch -->
+  <div class="rosa-fixed" aria-hidden="true">
+    <span class="rosa-r">R</span><span class="rosa-rest">osa</span>
+  </div>
 
+  <aside class="sidebar">
+    <h1 class="brand">
+      <a href="index.html" aria-label="Zur Startseite">
+        <span>CHARLY</span><span>KRÜGER</span>
+      </a>
+    </h1>
     <nav class="nav">
       <a href="01_free_projects.html">01 FREE PROJECTS</a>
       <a href="02_people.html">02 PEOPLE</a>
@@ -68,34 +171,22 @@
     </nav>
   </aside>
 
-  <!-- Inhalt belegt die linken 2/3 -->
   <main class="content">
     <div class="span-two">
-      <!-- Titel -->
       <section class="media align-with-first-nav">
-        <h2 class="caption-title">ROSA–DER KAPITALISTISCHE ZWANG ZUR WEIBLICHKEIT</h2>
-      </section>
-
-      <!-- Fragestellung -->
-      <section class="media">
-        <h3 class="caption-title accent">FRAGESTELLUNG</h3>
         <div class="stack-tight">
-          <p class="prose">Wie früh setzt die kapitalistische Rollenprägung ein?</p>
-          <p class="prose">Wie formen Spielsachen soziale Rollenbilder und Verhaltensweisen?</p>
-        </div>
-      </section>
-
-      <!-- Umsetzung -->
-      <section class="media">
-        <h3 class="caption-title accent">UMSETZUNG</h3>
-        <div class="stack-tight">
-          <p class="prose">Fotografische Dokumentation und Inszenierung von typischen Mädchenspielsachen, um ihre gesellschaftliche Bedeutung und Wirkung auf die Geschlechterrollen zu verdeutlichen.</p>
-          <p class="prose">Aufnahmen von Produkten und Spielgegenständen, um die subtile Beeinflussung der Geschlechtererziehung durch Design und Farbe zu zeigen.</p>
-          <p class="prose">Arbeiten mit Archivmaterial und Reprofotografie, um persönliche und kulturelle Narrative zu verweben und die Erlernung von Geschlechterrollen sichtbar zu machen.</p>
+          <p class="prose">
+            Spielsachen sind mehr als Mittel der Unterhaltung. Sie strukturieren frühe Wahrnehmungen und Handlungen. Sie stiften Routinen, Affekte und Formen der Identifikation. Welche Bedeutung haben diese Gegenstände für uns? Inwiefern prägen sie Verhalten, Selbstbilder und Ansichten von Kindern und Erwachsenen?
+          </p>
+          <p class="prose">
+            Die Vermarktung setzt zusätzliche Rahmen. Warum werden so viele Spielsachen entlang binärer Kategorien entworfen, hergestellt und beworben? Welche historischen, ökonomischen und gestalterischen Gründe tragen dazu bei? Produkte, die als für Mädchen adressiert sind, arbeiten häufig mit ästhetischen und symbolischen Codes. Farben, Formen, Materialien und Themen stellen Weiblichkeit auf bestimmte Weise dar. Welche Möglichkeiten eröffnen diese Codes, etwa Zugehörigkeit, Identifikation, Fantasie oder Geborgenheit? Welche Grenzen entstehen dabei, etwa Verengungen von Rollenbildern oder Ausschlüsse?
+          </p>
+          <p class="prose">
+            Die Arbeit nähert sich diesen Fragen mit fotografischen Studien, Gesprächen und dokumentarischem Material.
+          </p>
         </div>
       </section>
     </div>
-    <!-- Rechte Drittel-Spalte bleibt frei -->
   </main>
 
   <script src="script.js"></script>

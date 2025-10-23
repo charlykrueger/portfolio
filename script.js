@@ -46,11 +46,22 @@
       track.style.transform = `translate3d(${x}px,0,0)`;
     }
 
+    // Sichtbaren/kommenden Zustand bekanntmachen (für Lazy-Loader Preload)
+    function announcePrime(){
+      // nächste 1–2 echten Slides (ohne Klone) bestimmen
+      const n1 = ((index) % count) + 1;      // next
+      const n2 = ((index + 1) % count) + 1;  // next+1
+      const img1 = orig[n1 - 1].querySelector('img,picture img');
+      const img2 = orig[n2 - 1].querySelector('img,picture img');
+      el.dispatchEvent(new CustomEvent('slider:prime', { detail: { next: [img1, img2].filter(Boolean), index, count }}));
+    }
+
     // Initial sizing + position ohne Animation
     sizeSlides();
     disableTransition(); render();
     void track.offsetWidth; // Reflow
     enableTransition();
+    announcePrime();
 
     // Navigation (Blocken während Transition/Adjust)
     function goTo(newIndex){
@@ -59,6 +70,7 @@
       index = newIndex;
       enableTransition();
       render();
+      announcePrime();   // <- bei Navigation gleich Preload für nächste Slides anstoßen
       restart();
     }
     function next(){ goTo(index + 1); }
@@ -73,6 +85,7 @@
       void track.offsetWidth; // Reflow
       enableTransition();
       isAdjusting = false;
+      announcePrime();
     }
 
     track.addEventListener('transitionend', (e)=>{
@@ -127,46 +140,129 @@
   }
 })();
 
-/* ===== NEU: Bild-Lazy-Loader (für alle <img data-src>) ===== */
+/* ===== NEU: Bild-Lazy-Loader + Adjacent-Preload + Idle-Warming ===== */
 (function(){
-  const imgs = new Set(document.querySelectorAll('img[data-src]'));
-  if (!imgs.size) return;
-
-  const onLoad = img => {
+  // ---- Utilities ----
+  function onLoad(img){
     img.classList.remove('lazy');
     img.classList.add('is-loaded');
     img.removeAttribute('data-src');
-  };
+    img.removeAttribute('data-srcset');
+    img.removeAttribute('data-sizes');
+  }
 
-  const reveal = img => {
-    if (img.dataset.src) {
+  function reveal(img){
+    // <picture>: data-srcset/sizes auf <source> ist optional – wir unterstützen data-Attr. auf <img> selbst
+    if (img.dataset.srcset){
+      if (!img.hasAttribute('fetchpriority')) img.setAttribute('fetchpriority', 'low');
+      img.srcset = img.dataset.srcset;
+      if (img.dataset.sizes) img.sizes = img.dataset.sizes;
+    }
+    if (img.dataset.src){
+      if (!img.hasAttribute('fetchpriority')) img.setAttribute('fetchpriority', 'low');
       img.src = img.dataset.src;
     }
-    // falls irgendwann srcset genutzt wird:
-    if (img.dataset.srcset) {
-      img.srcset = img.dataset.srcset;
-    }
-    // bei Cache-Hits feuert 'load' evtl. sofort nicht – in dem Fall prüfen:
     if (img.complete) onLoad(img);
-  };
+  }
 
-  // Beobachter mit kleinem Vorlauf
+  // ---- Bilder einsammeln ----
+  const allLazy = new Set(document.querySelectorAll('img[data-src], img[data-srcset]'));
+  if (!allLazy.size) return;
+
+  // ---- Lade-Queue (damit nichts verhungert) ----
+  const queue = [];
+  let inFlight = 0;
+  const MAX_CONCURRENCY = 3;
+
+  function enqueue(img){
+    // Schon geladen/gestartet?
+    if (!(img.dataset && (img.dataset.src || img.dataset.srcset))) return;
+    // Doppelte vermeiden
+    if (queue.includes(img)) return;
+    queue.push(img);
+    pump();
+  }
+
+  function pump(){
+    while (inFlight < MAX_CONCURRENCY && queue.length){
+      const img = queue.shift();
+      // falls zwischenzeitlich schon geladen:
+      if (!(img.dataset && (img.dataset.src || img.dataset.srcset))) continue;
+
+      inFlight++;
+      const done = ()=>{ inFlight--; pump(); };
+      const once = ()=>{ img.removeEventListener('load', once); img.removeEventListener('error', once); onLoad(img); done(); };
+      img.addEventListener('load',  once, { once:true });
+      img.addEventListener('error', once, { once:true });
+      reveal(img);
+    }
+  }
+
+  // ---- Haupt-Observer (früher anfangen, je nach Verbindung) ----
+  const conn = (navigator.connection && navigator.connection.effectiveType) || '4g';
+  const rootMarginY = (conn === '2g' || conn === 'slow-2g') ?  '200px' : '900px';
   const io = new IntersectionObserver((entries)=>{
-    for (const e of entries) {
-      if (e.isIntersecting) {
+    for (const e of entries){
+      if (e.isIntersecting){
         const img = e.target;
         io.unobserve(img);
-        reveal(img);
+        enqueue(img);
       }
     }
-  }, { root: null, rootMargin: '200px 0px', threshold: 0.01 });
+  }, { root: null, rootMargin: `${rootMarginY} 0px`, threshold: 0.01 });
 
-  imgs.forEach(img => {
-    // wenn Bild schon sichtbar (z. B. durch Slider-Klone), sofort laden
-    io.observe(img);
-    img.addEventListener('load', ()=> onLoad(img), { once:true });
-    img.addEventListener('error', ()=> img.classList.remove('lazy'), { once:true });
+  // Bereits sichtbare sofort enqueuen, andere beobachten
+  allLazy.forEach(img => {
+    const r = img.getBoundingClientRect();
+    if (r.top < window.innerHeight + 50) enqueue(img);
+    else io.observe(img);
   });
+
+  // ---- Adjacent-Preload: Slider meldet nächste Bilder -> wir enqueuen sie ----
+  document.querySelectorAll('.slider').forEach(slider => {
+    // wenn Slider sichtbar wird, minimale Vorwärmung aller Galerien
+    const sliderIO = new IntersectionObserver((ents)=>{
+      for (const e of ents){
+        if (!e.isIntersecting) continue;
+        sliderIO.unobserve(slider);
+        // gute Verbindungen: 2 Bilder, sonst 1
+        const warmCount = (conn === '4g') ? 2 : 1;
+        // nimm die ersten lazy-Bilder in der Galerie
+        const imgs = slider.querySelectorAll('.slides .slide img');
+        let warmed = 0;
+        for (const im of imgs){
+          if (im.dataset && (im.dataset.src || im.dataset.srcset)){
+            enqueue(im);
+            if (++warmed >= warmCount) break;
+          }
+        }
+      }
+    }, { root: null, rootMargin: '0px', threshold: 0.25 });
+    sliderIO.observe(slider);
+
+    // Reagiere auf Wechsel/Navigation (Event kommt aus dem Slider oben)
+    slider.addEventListener('slider:prime', (ev)=>{
+      const nextImgs = ev.detail && ev.detail.next || [];
+      // lade next/next+1 vor
+      nextImgs.forEach(im => enqueue(im));
+    });
+  });
+
+  // ---- Idle-Warming: je OFFSCREEN-Galerie mindestens das erste Bild vorziehen ----
+  function warmOffscreenGalleries(){
+    document.querySelectorAll('.slider').forEach(sl=>{
+      const rect = sl.getBoundingClientRect();
+      const offscreen = rect.top > window.innerHeight * 1.3;
+      if (!offscreen) return;
+      const firstLazy = sl.querySelector('.slides img[data-src], .slides img[data-srcset]');
+      if (firstLazy) enqueue(firstLazy);
+    });
+  }
+  if ('requestIdleCallback' in window){
+    requestIdleCallback(warmOffscreenGalleries, { timeout: 2500 });
+  } else {
+    setTimeout(warmOffscreenGalleries, 1800);
+  }
 })();
 
 // ===== Ausrichtung: Oberkante ERSTER BLOCK = Oberkante "01 FREE PROJECTS" =====

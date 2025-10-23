@@ -124,6 +124,10 @@ figure{ margin:0 }
 .brand a { color: inherit; text-decoration: none; display: inline-block; }
 .brand a:hover { opacity:.85; }
 
+/* ===== Lazy states (NEU, minimal) ===== */
+img.lazy{ filter: blur(14px); transform: translateZ(0); transition: filter .25s ease; }
+img.is-loaded{ filter: none; }
+
 /* =========================
    SIDEBAR / NAV
 ========================= */
@@ -184,7 +188,6 @@ figure{ margin:0 }
   padding:0 var(--arrow-pad);
   background:transparent;
   transform:translateX(var(--gallery-nudge));
-  /* entfernt: contain: layout paint; */
 }
 .slider::before,
 .slider::after{
@@ -225,11 +228,6 @@ figure{ margin:0 }
   margin-left: calc(-1 * var(--arrow-pad));
   margin-right: calc(-1 * var(--arrow-pad));
 }
-
-/* entfernt:
-   .slider { overflow: clip; }
-   .slides, .slide { contain: paint; }
-*/
 
 /* =========================
    MEDIEN-BLÖCKE
@@ -340,44 +338,118 @@ figure{ margin:0 }
 .sound-toggle:hover{ opacity:1; }
 
 /* =========================
-   RESPONSIVE
+   RESPONSIVE (bereinigt)
 ========================= */
 @media (max-width:900px){
+  /* Root-Adjustments (deine Werte kombiniert) */
   :root{
-    --gallery-scale:.9;
-    --gallery-nudge:-28px;
-    --arrow-pad:24px;
+    --sidebar: 0px;
+    --gallery-pad: 16px;
+    --gallery-nudge: 0px;
+    --header-h: clamp(56px, 9.5vw, 84px);
+    --gallery-min: 0px;
+    --arrow-pad: 16px;
+    --gallery-scale: 1;
 
+    /* etwas kompaktere Typo mobil */
     --brand-size:40px;
     --nav-size:20px;
     --nav-letter:-0.032em;
     --nav-leading:.88;
-
     --block-gap-lg:36px;
   }
+
+  /* ==== TOPBAR: Grid -> [Brand | Nav] (kein Umbruch, nix abgeschnitten) ==== */
+  .sidebar{
+    position: sticky;
+    top: 0; left: 0; right: 0;
+    bottom: auto;
+    z-index: 50;
+
+    width: 100%;
+    height: auto;
+    padding: 10px 12px;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+
+    display: grid;
+    grid-template-columns: auto 1fr;  /* Brand | Nav */
+    align-items: center;
+    column-gap: 12px;
+  }
+
+  .brand{
+    margin: 0;
+    font-size: clamp(28px, 5.2vw, 40px);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .brand span{ display: inline; margin-right: 6px; }
+
+  .nav{
+    /* wichtig, damit der Container wirklich schrumpfen darf */
+    min-width: 0;
+    justify-self: stretch;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 16px;
+
+    overflow-x: auto;                      /* einzeilig, bei Bedarf scrollen */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-left: 6px;                     /* verhindert abgeschnittenes 1. Zeichen */
+    scroll-padding-left: 6px;              /* schönes Snappen bei iOS */
+  }
+  .nav::-webkit-scrollbar{ display: none; }
+
+  .nav a{
+    white-space: nowrap;
+    flex: 0 0 auto;
+    padding: 6px 0;
+    font-size: clamp(16px, 4.6vw, 20px);
+  }
+
+  /* ==== Inhalt unter die Topbar schieben und volle Breite nutzen ==== */
+  .content{
+    margin-left: 0;
+    padding-top: var(--header-h);
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* Medienblöcke und Slider wirklich 100% breit */
+  .media{
+    width: 100%;
+    transform: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .media .slider{
+    transform: none;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: var(--arrow-pad);
+    padding-right: var(--arrow-pad);
+  }
+
+  /* Mehrspaltiges untereinander */
   .duo{ grid-template-columns:1fr; gap:16px; }
   .triple{ grid-template-columns:1fr; gap:16px; }
   .pair{ grid-template-columns:1fr; gap:16px; }
-}
 
-/* ===== ABOUT (unverändert, inkl. Varianten) ===== */
-.page-about .about-grid{
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:24px;
-}
-.page-about .about-grid + .about-text{ margin-top: var(--gap-caption); }
-.page-about .about-grid a, .page-about .about-text a{ text-decoration: underline; }
-@media (max-width:900px){ .page-about .about-grid{ grid-template-columns:1fr; gap:16px; } }
+  /* erste Sektion nicht extra nach unten schieben */
+  .content .project-hero{ margin-top: 0 !important; }
 
-.page-about .about{
-  --about-gap: 24px;
-  --about-col: calc((var(--media-w) - (var(--about-gap) * 2)) / 3);
-  --about-text-scale: 1.444;
+  /* About-Layouts mobil */
+  .page-about .about-grid{ grid-template-columns:1fr; gap:16px; }
+  .page-about .about-ball{ display:none; }
+  .page-about .about-text .prose{ line-height: 1.05; }
+  .page-about .about-text{ max-width:100%; }
 }
-.page-about .about-text .prose{ line-height: 1.05; }
-.page-about .about-text{ max-width: calc(var(--about-col) * var(--about-text-scale)); }
-@media (max-width:900px){ .page-about .about-text{ max-width:100%; } }
 
 /* =========================
    LANDING: HELLO + click here + Ball (minimal)
@@ -504,21 +576,21 @@ figure{ margin:0 }
   top: var(--about-offset, 0px);
   margin-top: 0 !important;
 }
+
 /* ============ MOBILE SIDEBAR -> TOPBAR (<= 900px) ============ */
 @media (max-width: 900px){
   :root{
     /* Sidebar kalkulatorisch „abschalten“, damit die Galeriebreite voll genutzt wird */
     --sidebar: 0px;
-    --gallery-pad: 20px;       /* etwas kompakter auf Mobil */
+    --gallery-pad: 20px;       
     --gallery-nudge: 0px;
-    --header-h: clamp(56px, 9.5vw, 84px); /* geschätzte Topbar-Höhe für Content-Offset */
+    --header-h: clamp(56px, 9.5vw, 84px);
   }
 
-  /* Sidebar wird zur Topbar */
   .sidebar{
     position: sticky;
     top: 0; left: 0; right: 0;
-    bottom: auto;               /* überschreibt das alte fixed-Layout */
+    bottom: auto;
     width: 100%;
     height: auto;
     padding: 10px 12px;
@@ -531,15 +603,13 @@ figure{ margin:0 }
     z-index: 3;
   }
 
-  /* Brand kompakter in einer Zeile */
   .brand{
     margin: 0;
-    font-size: clamp(28px, 5.2vw, 40px); /* war 40–45px */
+    font-size: clamp(28px, 5.2vw, 40px);
     line-height: 1;
   }
   .brand span{ display: inline; margin-right: 6px; }
 
-  /* Navigation wird zu einer horizontal scrollbaren Leiste */
   .nav{
     flex: 1;
     display: flex;
@@ -548,40 +618,35 @@ figure{ margin:0 }
     gap: 16px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;         /* Firefox: Scrollbar ausblenden */
+    scrollbar-width: none;
   }
-  .nav::-webkit-scrollbar{ display: none; } /* WebKit: Scrollbar ausblenden */
+  .nav::-webkit-scrollbar{ display: none; }
   .nav a{
     white-space: nowrap;
     padding: 6px 0;
-    font-size: clamp(16px, 4.6vw, 20px); /* etwas kleiner auf Mobil */
+    font-size: clamp(16px, 4.6vw, 20px);
   }
 
-  /* Content rutscht unter die Topbar, kein linker Rand mehr */
   .content{
     margin-left: 0;
-    padding-top: var(--header-h);  /* Platz für die Topbar */
+    padding-top: var(--header-h);
   }
 
-  /* Auf Mobil keine spezielle Ausrichtung des ersten Blocks erzwingen */
   .content .project-hero{ margin-top: 0 !important; }
 }
+
 /* ============ MOBILE: Voll responsive Inhalt + Topbar (<= 900px) ============ */
 @media (max-width: 900px){
   :root{
-    /* Sidebar neutralisieren + kompaktere Ränder */
     --sidebar: 0px;
     --gallery-pad: 16px;
     --gallery-nudge: 0px;
     --header-h: clamp(56px, 9.5vw, 84px);
-
-    /* WICHTIG: Mindestbreite der Galerie aufheben */
     --gallery-min: 0px;
     --arrow-pad: 16px;
     --gallery-scale: 1;
   }
 
-  /* Sidebar als Topbar */
   .sidebar{
     position: sticky;
     top: 0; left: 0; right: 0;
@@ -621,7 +686,6 @@ figure{ margin:0 }
     font-size: clamp(16px, 4.6vw, 20px);
   }
 
-  /* Inhalt nutzt volle Breite unter der Topbar */
   .content{
     margin-left: 0;
     padding-top: var(--header-h);
@@ -629,7 +693,6 @@ figure{ margin:0 }
     padding-right: 12px;
   }
 
-  /* Medien/Slider wirklich 100% breit */
   .media{
     width: 100%;
     transform: none;
@@ -637,7 +700,6 @@ figure{ margin:0 }
     margin-right: 0;
   }
 
-  /* Slider füllt die Media-Breite */
   .media .slider{
     transform: none;
     width: 100%;
@@ -647,14 +709,53 @@ figure{ margin:0 }
     padding-right: var(--arrow-pad);
   }
 
-  /* Mehrspaltiges untereinander */
   .duo{ grid-template-columns:1fr; gap:16px; }
   .triple{ grid-template-columns:1fr; gap:16px; }
   .pair{ grid-template-columns:1fr; gap:16px; }
 
-  /* Ersten Block nicht extra nach unten schieben */
   .content .project-hero{ margin-top: 0 !important; }
 
-  /* About: Ball auf Mobil ausblenden (überlappt sonst Text) */
   .page-about .about-ball{ display:none; }
+}
+
+/* ===== Globaler Fix für schmale Ansichten (UMBRUCH VERHINDERN) ===== */
+@media (max-width: 900px){
+  .sidebar{
+    position: sticky; top: 0; z-index: 50;
+    background: #fff;
+    padding: 8px 12px;
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: nowrap;                 /* <<< NEU: kein Umbruch der Topbar */
+  }
+
+  .sidebar .brand{
+    display: inline-block;
+    margin-right: 12px;
+    vertical-align: middle;
+    flex: 0 0 auto;                    /* <<< NEU: Brand nicht schrumpfen */
+  }
+
+  .sidebar .nav{
+    display: inline-flex;
+    flex-wrap: nowrap;                 
+    gap: 20px;
+    vertical-align: middle;
+    overflow-x: auto;                  
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;             
+    max-width: 100%;
+    flex: 1 1 auto;                    /* <<< NEU: darf schrumpfen */
+    min-width: 0;                      /* <<< NEU: wichtig für kein Umbruch */
+  }
+  .sidebar .nav::-webkit-scrollbar{ display: none; }
+
+  .sidebar .nav a{
+    white-space: nowrap;               
+    flex: 0 0 auto;                    
+  }
 }
