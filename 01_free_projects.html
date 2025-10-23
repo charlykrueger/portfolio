@@ -9,11 +9,20 @@
   <!-- Preload: erstes Hero-Bild der ersten Galerie -->
   <link rel="preload" as="image" href="./image/pink_tax/pink_tax_01.jpg" imagesizes="100vw">
 
-  <!-- Responsive-Wrapper nur für YouTube-Embeds -->
+  <!-- Kleine Ergänzungen: Ratio gegen Layout-Shift + Lazy-Blur -->
   <style>
+    /* YouTube-Embed-Wrapper (wie gehabt) */
     .yt-wrap { position: relative; width: 100%; max-width: 1200px; margin: 0 auto 2rem; }
     .yt-wrap::before { content: ""; display: block; padding-top: 56.25%; } /* 16:9 */
     .yt-wrap > iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    /* NEU: Slides mit fester 3:2-Ratio (verhindert visuelles Springen) */
+    .slide { aspect-ratio: 3 / 2; }
+    .slide > img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    /* NEU: sanfter Blur-Placeholder bis Bild geladen ist */
+    img.lazy { filter: blur(14px); transform: translateZ(0); transition: filter .25s ease; }
+    img.is-loaded { filter: none; }
   </style>
 </head>
 <body class="page-free">
@@ -39,18 +48,20 @@
     <section class="project-hero">
       <div class="slider" data-fit="contain">
         <div class="slides">
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_01.jpg" alt="Pink Tax 01" loading="eager" fetchpriority="high" decoding="async"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_02.jpg" alt="Pink Tax 02" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_03.jpg" alt="Pink Tax 03" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_04.jpg" alt="Pink Tax 04" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_05.jpg" alt="Pink Tax 05" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_06.jpg" alt="Pink Tax 06" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_07.jpg" alt="Pink Tax 07" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_08.jpg" alt="Pink Tax 08" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_09.jpg" alt="Pink Tax 09" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_10.jpg" alt="Pink Tax 10" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_11.jpg" alt="Pink Tax 11" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/pink_tax/pink_tax_12.jpg" alt="Pink Tax 12" loading="lazy" decoding="async"></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img src="./image/pink_tax/pink_tax_01.jpg" alt="Pink Tax 01" loading="eager" fetchpriority="high" decoding="async"></figure>
+
+          <!-- ab hier: echte Lazy-Bilder via data-src -->
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/pink_tax/pink_tax_02.jpg" alt="Pink Tax 02" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/pink_tax/pink_tax_03.jpg" alt="Pink Tax 03" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/pink_tax/pink_tax_04.jpg" alt="Pink Tax 04" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/pink_tax/pink_tax_05.jpg" alt="Pink Tax 05" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/pink_tax/pink_tax_06.jpg" alt="Pink Tax 06" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/pink_tax/pink_tax_07.jpg" alt="Pink Tax 07" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/pink_tax/pink_tax_08.jpg" alt="Pink Tax 08" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/pink_tax/pink_tax_09.jpg" alt="Pink Tax 09" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/pink_tax/pink_tax_10.jpg" alt="Pink Tax 10" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/pink_tax/pink_tax_11.jpg" alt="Pink Tax 11" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/pink_tax/pink_tax_12.jpg" alt="Pink Tax 12" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
         </div>
       </div>
     </section>
@@ -80,12 +91,11 @@
     <!-- 3) Fotoduo -->
     <section class="media" style="--portrait-ratio: 3 / 2;">
       <div class="duo">
-        <figure><img src="./image/AutorInnen/autorInnen01.png" alt="Reproduktion – Bild 1"></figure>
-        <figure><img src="./image/AutorInnen/autorInnen02.png" alt="Reproduktion – Bild 2"></figure>
-        <figure><img src="./image/AutorInnen/autorInnen03.png" alt="Reproduktion – Bild 3"></figure>
+        <figure><img src="./image/AutorInnen/autorInnen01.png" alt="Reproduktion – Bild 1" loading="lazy" decoding="async"></figure>
+        <figure><img src="./image/AutorInnen/autorInnen02.png" alt="Reproduktion – Bild 2" loading="lazy" decoding="async"></figure>
+        <figure><img src="./image/AutorInnen/autorInnen03.png" alt="Reproduktion – Bild 3" loading="lazy" decoding="async"></figure>
       </div>
     </section>
-
 
     <!-- 3a) Untertitel Reproduktion + großer Abstand -->
     <section class="media spacer-half">
@@ -100,10 +110,10 @@
     <section class="media project-hero">
       <div class="slider" data-fit="contain">
         <div class="slides">
-          <figure class="slide"><img src="./image/alpha_1/a1.jpg" alt="Alpha 1 – Bild 1" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/alpha_1/a2.jpg" alt="Alpha 1 – Bild 2" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/alpha_1/a3.jpg" alt="Alpha 1 – Bild 3" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/alpha_1/a4.jpg" alt="Alpha 1 – Bild 4" loading="lazy" decoding="async"></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/alpha_1/a1.jpg" alt="Alpha 1 – Bild 1" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/alpha_1/a2.jpg" alt="Alpha 1 – Bild 2" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/alpha_1/a3.jpg" alt="Alpha 1 – Bild 3" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/alpha_1/a4.jpg" alt="Alpha 1 – Bild 4" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
         </div>
       </div>
     </section>
@@ -120,12 +130,12 @@
     <section class="media project-hero">
       <div class="slider" data-fit="contain">
         <div class="slides">
-          <figure class="slide"><img src="./image/lowshutter/lowshutter.jpg" alt="Low Shutter 0" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/lowshutter/lowshutter1.jpg" alt="Low Shutter 1" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/lowshutter/lowshutter2.jpg" alt="Low Shutter 2" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/lowshutter/lowshutter3.jpg" alt="Low Shutter 3" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/lowshutter/lowshutter4.jpg" alt="Low Shutter 4" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/lowshutter/lowshutter5.jpg" alt="Low Shutter 5" loading="lazy" decoding="async"></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/lowshutter/lowshutter.jpg" alt="Low Shutter 0" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/lowshutter/lowshutter1.jpg" alt="Low Shutter 1" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/lowshutter/lowshutter2.jpg" alt="Low Shutter 2" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/lowshutter/lowshutter3.jpg" alt="Low Shutter 3" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/lowshutter/lowshutter4.jpg" alt="Low Shutter 4" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide" style="aspect-ratio:3/2;"><img data-src="./image/lowshutter/lowshutter5.jpg" alt="Low Shutter 5" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
         </div>
       </div>
     </section>

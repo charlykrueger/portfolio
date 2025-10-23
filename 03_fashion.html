@@ -44,6 +44,14 @@
       }
       .hero-align .hero-row > .gap-col{ display:none; }
     }
+
+    /* NEU: Slides mit fester Ratio gegen Layout-Shift */
+    .slide { aspect-ratio: 3 / 2; }
+    .slide > img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    /* NEU: sanfter Blur-Placeholder bis Bild geladen ist */
+    img.lazy { filter: blur(14px); transform: translateZ(0); transition: filter .25s ease; }
+    img.is-loaded { filter: none; }
   </style>
 </head>
 <body class="page-fashion">
@@ -94,10 +102,10 @@
       <div class="slider" data-fit="contain">
         <div class="slides">
           <figure class="slide"><img src="./image/fashion/ronja1.jpg" alt="Bachelorkollektion Ronja Schulz — 01" loading="eager" fetchpriority="high" decoding="async"></figure>
-          <figure class="slide"><img src="./image/fashion/ronja2.jpg" alt="Bachelorkollektion Ronja Schulz — 02" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/fashion/ronja3.jpg" alt="Bachelorkollektion Ronja Schulz — 03" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/fashion/ronja4.jpg" alt="Bachelorkollektion Ronja Schulz — 04" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/fashion/ronja5.jpg" alt="Bachelorkollektion Ronja Schulz — 05" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img data-src="./image/fashion/ronja2.jpg" alt="Bachelorkollektion Ronja Schulz — 02" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide"><img data-src="./image/fashion/ronja3.jpg" alt="Bachelorkollektion Ronja Schulz — 03" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide"><img data-src="./image/fashion/ronja4.jpg" alt="Bachelorkollektion Ronja Schulz — 04" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide"><img data-src="./image/fashion/ronja5.jpg" alt="Bachelorkollektion Ronja Schulz — 05" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
         </div>
       </div>
     </section>
@@ -111,13 +119,13 @@
     <section class="media">
       <div class="triple">
         <figure class="spot">
-          <img src="./image/fashion/alina1.jpg" alt="Bachelorkollektion Alina — 01" loading="lazy" decoding="async">
+          <img data-src="./image/fashion/alina1.jpg" alt="Bachelorkollektion Alina — 01" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==">
         </figure>
         <figure class="spot">
-          <img src="./image/fashion/aline2.jpg" alt="Bachelorkollektion Alina — 02" loading="lazy" decoding="async">
+          <img data-src="./image/fashion/aline2.jpg" alt="Bachelorkollektion Alina — 02" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==">
         </figure>
         <figure class="spot">
-          <img src="./image/fashion/alina3.jpg" alt="Bachelorkollektion Alina — 03" loading="lazy" decoding="async">
+          <img data-src="./image/fashion/alina3.jpg" alt="Bachelorkollektion Alina — 03" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==">
         </figure>
       </div>
     </section>

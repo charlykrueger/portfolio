@@ -8,6 +8,14 @@
 
   <!-- Preload: erstes Bild der Hero-Galerie -->
   <link rel="preload" as="image" href="./image/event/display/d1.png" imagesizes="100vw">
+
+  <!-- NEU: kleine Helfer gegen Layout-Shift + Blur-Placeholder -->
+  <style>
+    .slide { aspect-ratio: 3 / 2; }
+    .slide > img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    img.lazy { filter: blur(14px); transform: translateZ(0); transition: filter .25s ease; }
+    img.is-loaded { filter: none; }
+  </style>
 </head>
 <body class="page-events">
   <aside class="sidebar">
@@ -33,13 +41,13 @@
       <div class="slider" data-fit="contain">
         <div class="slides">
           <figure class="slide"><img src="./image/event/display/d1.png" alt="[Dis]Play — Bild 1" loading="eager" fetchpriority="high" decoding="async"></figure>
-          <figure class="slide"><img src="./image/event/display/d2.png" alt="[Dis]Play — Bild 2" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/event/display/d3.png" alt="[Dis]Play — Bild 3" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/event/display/d4.png" alt="[Dis]Play — Bild 4" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/event/display/d5.png" alt="[Dis]Play — Bild 5" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/event/display/d6.png" alt="[Dis]Play — Bild 6" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/event/display/d7.png" alt="[Dis]Play — Bild 7" loading="lazy" decoding="async"></figure>
-          <figure class="slide"><img src="./image/event/display/d8.png" alt="[Dis]Play — Bild 8" loading="lazy" decoding="async"></figure>
+          <figure class="slide"><img data-src="./image/event/display/d2.png" alt="[Dis]Play — Bild 2" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide"><img data-src="./image/event/display/d3.png" alt="[Dis]Play — Bild 3" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide"><img data-src="./image/event/display/d4.png" alt="[Dis]Play — Bild 4" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide"><img data-src="./image/event/display/d5.png" alt="[Dis]Play — Bild 5" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide"><img data-src="./image/event/display/d6.png" alt="[Dis]Play — Bild 6" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide"><img data-src="./image/event/display/d7.png" alt="[Dis]Play — Bild 7" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+          <figure class="slide"><img data-src="./image/event/display/d8.png" alt="[Dis]Play — Bild 8" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
         </div>
       </div>
     </section>
@@ -47,9 +55,8 @@
     <!-- 2) Zweier-Bildblock bündig zu Galerie-Kanten -->
     <section class="media">
       <div class="pair">
-        <!-- Falls doku1.jpf nicht existiert: bitte in doku1.jpg umbenennen -->
-        <figure><img src="./image/event/display/doku1.jpg" alt="Dokumentation 1" loading="lazy" decoding="async"></figure>
-        <figure><img src="./image/event/display/doku2.jpg" alt="Dokumentation 2" loading="lazy" decoding="async"></figure>
+        <figure><img data-src="./image/event/display/doku1.jpg" alt="Dokumentation 1" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
+        <figure><img data-src="./image/event/display/doku2.jpg" alt="Dokumentation 2" loading="lazy" decoding="async" fetchpriority="low" class="lazy" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></figure>
       </div>
     </section>
 

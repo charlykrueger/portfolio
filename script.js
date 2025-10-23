@@ -127,6 +127,48 @@
   }
 })();
 
+/* ===== NEU: Bild-Lazy-Loader (für alle <img data-src>) ===== */
+(function(){
+  const imgs = new Set(document.querySelectorAll('img[data-src]'));
+  if (!imgs.size) return;
+
+  const onLoad = img => {
+    img.classList.remove('lazy');
+    img.classList.add('is-loaded');
+    img.removeAttribute('data-src');
+  };
+
+  const reveal = img => {
+    if (img.dataset.src) {
+      img.src = img.dataset.src;
+    }
+    // falls irgendwann srcset genutzt wird:
+    if (img.dataset.srcset) {
+      img.srcset = img.dataset.srcset;
+    }
+    // bei Cache-Hits feuert 'load' evtl. sofort nicht – in dem Fall prüfen:
+    if (img.complete) onLoad(img);
+  };
+
+  // Beobachter mit kleinem Vorlauf
+  const io = new IntersectionObserver((entries)=>{
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        const img = e.target;
+        io.unobserve(img);
+        reveal(img);
+      }
+    }
+  }, { root: null, rootMargin: '200px 0px', threshold: 0.01 });
+
+  imgs.forEach(img => {
+    // wenn Bild schon sichtbar (z. B. durch Slider-Klone), sofort laden
+    io.observe(img);
+    img.addEventListener('load', ()=> onLoad(img), { once:true });
+    img.addEventListener('error', ()=> img.classList.remove('lazy'), { once:true });
+  });
+})();
+
 // ===== Ausrichtung: Oberkante ERSTER BLOCK = Oberkante "01 FREE PROJECTS" =====
 // ===== Erster Caption-Block: Abstand analog Brand ↔ "01 FREE PROJECTS" =====
 (function(){
